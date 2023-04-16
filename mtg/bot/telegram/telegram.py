@@ -126,7 +126,7 @@ class TelegramBot:
             return
         full_user = update.effective_user.first_name
         if update.effective_user.last_name is not None:
-            full_user += ' ' + update.effective_user.last_name
+            full_user += f' {update.effective_user.last_name}'
         message = ''
         if update.message and update.message.text:
             message += update.message.text

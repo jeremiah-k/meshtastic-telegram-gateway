@@ -106,8 +106,9 @@ class MeshtasticDB:
         """
         get_filter - get blacklist status for connection and identifier
         """
-        record = FilterRecord.select(lambda n: n.connection == connection and n.item == identifier).first()
-        if record:
+        if record := FilterRecord.select(
+            lambda n: n.connection == connection and n.item == identifier
+        ).first():
             return True, record
         return False, None
 
@@ -125,7 +126,7 @@ class MeshtasticDB:
         node_name = node_info.get('user', {}).get('longName', '')
         hw_model = node_info.get('user', {}).get('hwModel', '')
         if not node_record:
-            if node_name and hw_model and node_name:
+            if node_name and hw_model:
                 conditional_log(f'creating new record... {node_info}', self.logger, True)
                 # create new record
                 node_record = MeshtasticNodeRecord(
@@ -231,6 +232,7 @@ class MeshtasticDB:
         cnd = lambda n: n.node == node_record and n.datetime >= datetime.now() - timedelta(seconds=tail)
         record = MeshtasticLocationRecord.select(cnd)
         location_record = record.order_by(desc(MeshtasticLocationRecord.datetime))
-        for l_r in location_record:
-            data.append({"lat": l_r.latitude, "lng": l_r.longitude})
+        data.extend(
+            {"lat": l_r.latitude, "lng": l_r.longitude} for l_r in location_record
+        )
         return data

@@ -29,8 +29,7 @@ class Memcache:
         get_ex - get data by key. With expiration meta
         """
         with self.lock:
-            value = self.cache.get(key)
-            return value
+            return self.cache.get(key)
 
 
     def set(self, key, value, expires=0):

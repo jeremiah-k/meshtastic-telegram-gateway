@@ -43,7 +43,7 @@ class MQTT:
         """
         on_connect - MQTT callback for connection event
         """
-        self.logger.info("Connected with result code "+str(result_code))
+        self.logger.info(f"Connected with result code {str(result_code)}")
         client.subscribe('msh/#')
 
     def on_message(self, _client, _userdata, msg):
